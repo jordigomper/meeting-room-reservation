@@ -1,0 +1,41 @@
+{
+  "name": "meeting-room-reservation",
+  "version": "0.1.0",
+  "author": "Jordi Gomper",
+  "license": "ISC",
+  "description": "this app is a boilerplate used for pets projects",
+  "main": "src/server.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jordigomper/meeting-room-reservation.git"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "express"
+  ],
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "start": "tsc && node dist/server.js",
+    "dev": "tsc -w & nodemon src/server.ts"
+  },
+  "dependencies": {
+    "express": "4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.6",
+    "@types/jest": "25.2.1",
+    "@types/node": "13.13.5",
+    "jest": "25.5.4",
+    "nodemon": "2.0.2",
+    "supertest": "4.0.2",
+    "ts-jest": "25.5.0",
+    "tslint": "6.1.2",
+    "typescript": "3.8.3"
+  },
+  "bugs": {
+    "url": "https://github.com/jordigomper/meeting-room-reservation/issues"
+  },
+  "homepage": "https://github.com/jordigomper/meeting-room-reservation#readme"
+}

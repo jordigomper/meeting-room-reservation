@@ -1,0 +1,9 @@
+{
+  "roots": ["<rootDir>/src"],
+  "testEnvironment": "node",
+  "coveragePathIgnorePatterns": ["/node_modules/"],
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "coverageReporters": ["json", "lcov", "text", "clover"]
+}
