@@ -18,6 +18,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
+      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
     };
     expect(await saveMeeting(MeetingRepositoryMock)(meeting)).toBeTruthy();
   }); 
@@ -36,6 +37,7 @@ describe("Meeting business requirements", () => {
       };
       const MeetingRepositoryMock: MeetingRepository = {
         save: (meeting: IMeeting) => Promise.resolve(true),
+        getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
       };
       try {
         await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -58,6 +60,7 @@ describe("Meeting business requirements", () => {
       };
       const MeetingRepositoryMock: MeetingRepository = {
         save: (meeting: IMeeting) => Promise.resolve(true),
+        getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
       };
       try {
         await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -81,6 +84,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
+      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
     };
     try {
       await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -103,6 +107,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
+      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
     };
     try {
       await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -112,10 +117,6 @@ describe("Meeting business requirements", () => {
     }
   });
   it('Una reunión tiene que ser atendida por mínimo un usuario, sin límite de participantes', async (done) => {
-    const assistants: IUser = {
-      id: 'fake-id',
-      name: 'fake-name',
-    };
     const meeting: IMeeting = {
       id: 'fake-meeting-id',
       name: 'fake-meeting-name',
@@ -125,6 +126,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
+      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
     };
 
     try {
@@ -134,5 +136,46 @@ describe("Meeting business requirements", () => {
       done();
     }
   });
-  // it('Cada usuario puede crear reuniones, pero la reunion solo se creara si todos los participantes tienen disponibilidad', () => {});
+  it('Cada usuario puede crear reuniones, pero la reunion solo se creara si todos los participantes tienen disponibilidad', async (done) => {
+    const assistants: IUser = {
+      id: 'fake-id-assistant',
+      name: 'fake-name',
+    };
+    const userWithoutFreeTime: IUser = {
+      id: 'fake-id-assistant-without-availability',
+      name: 'fake-name',
+    };
+    const meetingFakeDB = [{
+      id: 'fake-meeting-id',
+      name: 'fake-meeting-name',
+      startAt: '2020-10-13T10:00:00.000Z',
+      finishAt: '2020-10-13T11:00:00.000Z',
+      assistants: [userWithoutFreeTime],
+    }];
+    const meeting: IMeeting = {
+      id: 'fake-meeting-id',
+      name: 'fake-meeting-name',
+      startAt: '2020-10-13T09:00:00.000Z',
+      finishAt: '2020-10-13T12:00:00.000Z',
+      assistants: [assistants, userWithoutFreeTime],
+    };
+    const MeetingRepositoryMock: MeetingRepository = {
+      save: (meeting: IMeeting) => {
+        meetingFakeDB.push(meeting); 
+        return Promise.resolve(true);
+      },
+      getMeetingByUser: (users: IUser[]) => {
+        const meetingsByUsers = meetingFakeDB.filter((meeting: IMeeting) => 
+          meeting.assistants.some((assistants: IUser) => 
+            users.some((user: IUser) => assistants.id === user.id )));
+        return Promise.resolve(meetingsByUsers);
+      },
+    };
+    try {
+      await saveMeeting(MeetingRepositoryMock)(meeting);
+    } catch (error) {
+      expect(error).toEqual('Hay usuarios que no tiene disponibilidad para esta reunión.');
+      done();
+    }
+  });
 });
