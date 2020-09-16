@@ -8,6 +8,7 @@ const saveMeeting = (
   const startAtISODataTime = DateTime.fromISO(meeting.startAt, { setZone: true });
   const finishAtISODataTime = DateTime.fromISO(meeting.finishAt, { setZone: true });
   if(startAtISODataTime.hour < 9 || finishAtISODataTime.hour  > 18) throw 'No se pueden crear reuniónes fuera del rango establecido';
+  if(finishAtISODataTime.diff(startAtISODataTime, 'minute').values.minutes < 30) throw 'La duración mínima de la reunión debe de ser de 30 minutos.';
   return meetingRepository.save(meeting);
 };
 
