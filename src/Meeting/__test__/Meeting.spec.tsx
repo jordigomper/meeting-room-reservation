@@ -89,7 +89,28 @@ describe("Meeting business requirements", () => {
       done();
     }
   });
-  // it('Una reunión debe empezar y terminar en el mismo día (no pueden crearse reuniones que empiecen en el día i y terminen en el día i+1)', () => {});
+  it('Una reunión debe empezar y terminar en el mismo día (no pueden crearse reuniones que empiecen en el día i y terminen en el día i+1)', async (done) => {
+    const assistants: IUser = {
+      id: 'fake-id',
+      name: 'fake-name',
+    };
+    const meeting: IMeeting = {
+      id: 'fake-meeting-id',
+      name: 'fake-meeting-name',
+      startAt: '2020-10-13T10:00:00.000Z',
+      finishAt: '2020-10-14T11:00:00.000Z',
+      assistants: [assistants],
+    };
+    const MeetingRepositoryMock: MeetingRepository = {
+      save: (meeting: IMeeting) => Promise.resolve(true),
+    };
+    try {
+      await saveMeeting(MeetingRepositoryMock)(meeting);
+    } catch (error) {
+      expect(error).toEqual('La duración máxima de una reunión es de 8 horas.');
+      done();
+    }
+  });
   // it('Una reunión tiene que ser atendida por mínimo un usuario, sin límite de participantes', () => {});
   // it('Cada usuario puede crear reuniones, pero la reunion solo se creara si todos los participantes tienen disponibilidad', () => {});
 });
