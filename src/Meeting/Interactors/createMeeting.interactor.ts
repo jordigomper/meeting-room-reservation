@@ -28,7 +28,7 @@ async function checkBusinessRulesOfUsers(assistants: IUser[], meetingRepository:
   if (haveUsers(assistants))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
 
-  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUser(assistants);
+  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUsers(assistants);
 
   meetingsByUser.map((meeting: IMeeting) => {
     const meetingStartDataTime = parseToISODataTime(meeting.startAt);

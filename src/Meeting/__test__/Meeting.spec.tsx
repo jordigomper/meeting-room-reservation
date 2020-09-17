@@ -18,7 +18,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
-      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+      getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
     };
     expect(await saveMeeting(MeetingRepositoryMock)(meeting)).toBeTruthy();
   }); 
@@ -37,7 +37,7 @@ describe("Meeting business requirements", () => {
       };
       const MeetingRepositoryMock: MeetingRepository = {
         save: (meeting: IMeeting) => Promise.resolve(true),
-        getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+        getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
       };
       try {
         await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -60,7 +60,7 @@ describe("Meeting business requirements", () => {
       };
       const MeetingRepositoryMock: MeetingRepository = {
         save: (meeting: IMeeting) => Promise.resolve(true),
-        getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+        getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
       };
       try {
         await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -84,7 +84,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
-      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+      getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
     };
     try {
       await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -107,7 +107,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
-      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+      getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
     };
     try {
       await saveMeeting(MeetingRepositoryMock)(meeting);
@@ -126,7 +126,7 @@ describe("Meeting business requirements", () => {
     };
     const MeetingRepositoryMock: MeetingRepository = {
       save: (meeting: IMeeting) => Promise.resolve(true),
-      getMeetingByUser: (users: IUser[]) => Promise.resolve([]),
+      getMeetingByUsers: (users: IUser[]) => Promise.resolve([]),
     };
 
     try {
@@ -164,7 +164,7 @@ describe("Meeting business requirements", () => {
         meetingFakeDB.push(meeting); 
         return Promise.resolve(true);
       },
-      getMeetingByUser: (users: IUser[]) => {
+      getMeetingByUsers: (users: IUser[]) => {
         const meetingsByUsers = meetingFakeDB.filter((meeting: IMeeting) => 
           meeting.assistants.some((assistants: IUser) => 
             users.some((user: IUser) => assistants.id === user.id )));
