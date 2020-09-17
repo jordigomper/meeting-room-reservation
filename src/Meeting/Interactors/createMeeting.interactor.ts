@@ -18,7 +18,7 @@ const saveMeeting = (
   if (!isSameDay(startAt, finishAt))
     throw 'La reunión no puede exceder de un día.';
 
-  // user constraints
+  // meeting users constraints
   if (haveUsers(assistants))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
   const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUsers(assistants);
