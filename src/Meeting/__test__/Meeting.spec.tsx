@@ -86,7 +86,7 @@ describe("Meeting business requirements", () => {
     try {
       await saveMeetingStub(meeting);
     } catch (error) {
-      expect(error).toEqual('La duración máxima de una reunión es de 8 horas.');
+      expect(error).toEqual('La reunión no puede exceder de un día.');
 
       done();
     }

@@ -6,68 +6,70 @@ import MeetingRepository from "../Domain/Meeting.repository";
 const saveMeeting = (
   meetingRepository: MeetingRepository
 ) => async (meeting: IMeeting): Promise<boolean> => {
-  const startAtISODataTime: DateTime = parseToISODataTime(meeting.startAt);
-  const finishAtISODataTime: DateTime = parseToISODataTime(meeting.finishAt);
-  checkBusinessRulesOfMeetingTimeFormat(startAtISODataTime, finishAtISODataTime);
-  await checkBusinessRulesOfUsers(meeting.assistants, meetingRepository, startAtISODataTime, finishAtISODataTime);
+  const startAt: DateTime = parseToISODataTime(meeting.startAt);
+  const finishAt: DateTime = parseToISODataTime(meeting.finishAt);
+  checkBusinessRulesOfMeetingTimeFormat(startAt, finishAt);
+  await checkBusinessRulesOfUsers(meeting.assistants, meetingRepository, startAt, finishAt);
   return meetingRepository.save(meeting);
 };
 
 export default saveMeeting;
 
-/**
- * 
- * Utils
- */
-
-function parseToISODataTime(dataTime: string): DateTime {
-  return DateTime.fromISO(dataTime, { setZone: true });
-}
-
-async function checkBusinessRulesOfUsers(assistants: IUser[], meetingRepository: MeetingRepository, startAtISODataTime: DateTime, finishAtISODataTime: DateTime) {
-  if (haveUsers(assistants))
+async function checkBusinessRulesOfUsers(users: IUser[], meetingRepository: MeetingRepository, startAt: DateTime, finishAt: DateTime) {
+  if (haveUsers(users))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
 
-  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUsers(assistants);
+  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUsers(users);
 
   meetingsByUser.map((meeting: IMeeting) => {
     const meetingStartDataTime = parseToISODataTime(meeting.startAt);
     const meetingFinishDataTime = parseToISODataTime(meeting.finishAt);
-
-    if (isMeetingsInSameTime(startAtISODataTime, finishAtISODataTime, meetingStartDataTime, meetingFinishDataTime)) {
+    if (isMeetingsInSameTime(startAt, finishAt, meetingStartDataTime, meetingFinishDataTime)) {
       throw 'Hay usuarios que no tiene disponibilidad para esta reunión.';
     }
   });
 }
 
-function checkBusinessRulesOfMeetingTimeFormat(startAtISODataTime: DateTime, finishAtISODataTime: DateTime) {
-  if (isOutTime(startAtISODataTime, finishAtISODataTime))
+function checkBusinessRulesOfMeetingTimeFormat(startAt: DateTime, finishAt: DateTime) {
+  if (isOutTime(startAt, finishAt))
     throw 'No se pueden crear reuniónes fuera del rango establecido';
-  if (isTheMinimumMeetingTimeInsufficient(finishAtISODataTime, startAtISODataTime))
+  if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
     throw 'La duración mínima de la reunión debe de ser de 30 minutos.';
-  if (isTheMaximumTimeExceeded(finishAtISODataTime, startAtISODataTime))
-    throw 'La duración máxima de una reunión es de 8 horas.';
+  if (!isSameDay(startAt, finishAt))
+    throw 'La reunión no puede exceder de un día.';
 }
 
-function isMeetingsInSameTime(startAtISODataTime: DateTime, finishAtISODataTime: DateTime, meetingStartDataTime: DateTime, meetingFinishDataTime: DateTime) {
-  return startAtISODataTime.diff(meetingStartDataTime, 'hour').hours < 0
-    && meetingFinishDataTime.diff(finishAtISODataTime, 'hour').hours < 0
-    || startAtISODataTime.diff(meetingStartDataTime, 'hour').hours > 0
-    || meetingFinishDataTime.diff(finishAtISODataTime, 'hour').hours > 0;
+/**
+ * 
+ * Utils
+ */
+function parseToISODataTime(dataTime: string): DateTime {
+  return DateTime.fromISO(dataTime, { setZone: true });
+}
+
+function isMeetingsInSameTime(startAtDate1: DateTime, finishAtDate1: DateTime, startAtDate2: DateTime, finishAtDate2: DateTime) {
+  return isSameDay(startAtDate1, startAtDate2) && timeOverlaps(startAtDate1, finishAtDate1, startAtDate2, finishAtDate2);
 }
 
 function haveUsers(assistants: IUser[]) {
   return !assistants.length;
 }
 
-function isTheMaximumTimeExceeded(finishAtISODataTime: DateTime, startAtISODataTime: DateTime) {
-  return finishAtISODataTime.diff(startAtISODataTime, 'day').days > 1;
+function isTheMinimumMeetingTimeInsufficient(startAt: DateTime, finishAt: DateTime) {
+  return finishAt.diff(startAt, 'minute').minutes < 30;
 }
 
-function isTheMinimumMeetingTimeInsufficient(finishAtISODataTime: DateTime, startAtISODataTime: DateTime) {
-  return finishAtISODataTime.diff(startAtISODataTime, 'minute').minutes < 30;
+function isOutTime(startAt: DateTime, finishAt: DateTime) {
+  return startAt.hour < 9 || finishAt.hour > 18;
 }
 
-function isOutTime(startAtISODataTime: DateTime, finishAtISODataTime: DateTime) {
-  return startAtISODataTime.hour < 9 || finishAtISODataTime.hour > 18;
+function isSameDay(date1: DateTime, date2: DateTime): boolean {
+  return date1.hasSame(date2, 'day') && date1.hasSame(date2, 'month') && date1.hasSame(date2, 'year');
+}
+
+function timeOverlaps(startAtDate1, finishAtDate1, startAtDate2, finishAtDate2) {
+  return startAtDate1.diff(startAtDate2, 'hour').hours < 0
+  && finishAtDate2.diff(finishAtDate1, 'hour').hours < 0
+  || startAtDate1.diff(startAtDate2, 'hour').hours > 0
+  || finishAtDate2.diff(finishAtDate1, 'hour').hours > 0;
 }
