@@ -27,6 +27,7 @@
     }
   },
   "dependencies": {
+    "@types/luxon": "^1.24.4",
     "express": "4.17.1",
     "luxon": "^1.25.0"
   },
