@@ -6,8 +6,8 @@ import MeetingRepository from "../Domain/Meeting.repository";
 const saveMeeting = (
   meetingRepository: MeetingRepository
 ) => async (meeting: IMeeting): Promise<boolean> => {
-  const startAtISODataTime: DateTime = DateTime.fromISO(meeting.startAt, { setZone: true });
-  const finishAtISODataTime: DateTime = DateTime.fromISO(meeting.finishAt, { setZone: true });
+  const startAtISODataTime: DateTime = parseToISODataTime(meeting.startAt);
+  const finishAtISODataTime: DateTime = parseToISODataTime(meeting.finishAt);
   checkBusinessRulesOfMeetingTimeFormat(startAtISODataTime, finishAtISODataTime);
   await checkBusinessRulesOfUsers(meeting.assistants, meetingRepository, startAtISODataTime, finishAtISODataTime);
   return meetingRepository.save(meeting);
@@ -20,6 +20,10 @@ export default saveMeeting;
  * Utils
  */
 
+function parseToISODataTime(dataTime: string): DateTime {
+  return DateTime.fromISO(dataTime, { setZone: true });
+}
+
 async function checkBusinessRulesOfUsers(assistants: IUser[], meetingRepository: MeetingRepository, startAtISODataTime: DateTime, finishAtISODataTime: DateTime) {
   if (haveUsers(assistants))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
@@ -27,8 +31,8 @@ async function checkBusinessRulesOfUsers(assistants: IUser[], meetingRepository:
   const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUser(assistants);
 
   meetingsByUser.map((meeting: IMeeting) => {
-    const meetingStartDataTime = DateTime.fromISO(meeting.startAt, { setZone: true });
-    const meetingFinishDataTime = DateTime.fromISO(meeting.finishAt, { setZone: true });
+    const meetingStartDataTime = parseToISODataTime(meeting.startAt);
+    const meetingFinishDataTime = parseToISODataTime(meeting.finishAt);
 
     if (isMeetingsInSameTime(startAtISODataTime, finishAtISODataTime, meetingStartDataTime, meetingFinishDataTime)) {
       throw 'Hay usuarios que no tiene disponibilidad para esta reunión.';
