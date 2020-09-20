@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export default (db: string) => {
+export default (db: string): void => {
   const connect = () => {
     mongoose
       .connect(db, { useNewUrlParser: true })
