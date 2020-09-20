@@ -5,7 +5,7 @@ import MeetingRepository from "../Domain/Meeting.repository";
 
 const saveMeeting = (
   meetingRepository: MeetingRepository
-) => async (meeting: IMeeting): Promise<boolean> => {
+) => async (meeting: IMeeting): Promise<IMeeting> => {
   const startAt: DateTime = parseToISODataTime(meeting.startAt);
   const finishAt: DateTime = parseToISODataTime(meeting.finishAt);
   const {assistants} = meeting;
@@ -21,11 +21,11 @@ const saveMeeting = (
   // meeting users constraints
   if (haveUsers(assistants))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
-  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingByUsers(assistants);
+  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingsByUsers(assistants);
   if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
     throw 'Hay usuarios que no tiene disponibilidad para esta reunión.';
 
-  return meetingRepository.save(meeting);
+  return await meetingRepository.save(meeting);
 };
 
 export default saveMeeting;
@@ -58,11 +58,16 @@ function isSameDay(date1: DateTime, date2: DateTime): boolean {
   return date1.hasSame(date2, 'day') && date1.hasSame(date2, 'month') && date1.hasSame(date2, 'year');
 }
 
-function timeOverlaps(startAtDate1, finishAtDate1, startAtDate2, finishAtDate2) {
-  return startAtDate1.diff(startAtDate2, 'hour').hours < 0
-  && finishAtDate2.diff(finishAtDate1, 'hour').hours < 0
-  || startAtDate1.diff(startAtDate2, 'hour').hours > 0
-  || finishAtDate2.diff(finishAtDate1, 'hour').hours > 0;
+export function timeOverlaps(startAtDate1: DateTime, finishAtDate1: DateTime, startAtDate2: DateTime, finishAtDate2: DateTime): boolean {
+          // empieza misma hora
+  return startAtDate1.hasSame(startAtDate2, 'minute') 
+          || finishAtDate1.hasSame(finishAtDate2, 'minute')
+          // empieza antes acaba igual o después
+          || startAtDate2.diff(startAtDate1, 'hour').hours > 0
+          && startAtDate2.diff(finishAtDate1, 'hour').hours <= 0
+          // empieza en mitad de una reuniçon
+          || startAtDate2.diff(startAtDate1, 'hour').hours < 0
+          && finishAtDate2.diff(startAtDate1, 'hour').hours > 0;
 }
 
 function areThereUsersUnavailable(meetingsByUser: IMeeting[], startAt: DateTime, finishAt: DateTime): boolean {
