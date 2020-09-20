@@ -1,8 +1,13 @@
 "use strict";
 
 import express from "express";
+import connect from './mongoDBconnection';
+import HttpMeetingAccessData from './Meeting/DataAccess/HttpMeeting.data-access';
 
 const server = express();
+
+const db = 'mongodb://localhost:27017/';
+connect(db);
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
