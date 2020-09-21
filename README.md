@@ -1,22 +1,25 @@
-# Node boilerplate
+# Hexagonal Architecture con NodeJS y TypeScript - Meeting reservation
+Una aplicación básica para poder crear reuniónes dependiendo de la disponibilidad de los usuarios convocados.
 
-Contains the basic configuration to create a node server.
+- Domain: Contiene toda la lógica del negocio.
+- Interactors: Casos de uso de nuestro negocio.
 
-## Getting Started
+Inputs and Outputs
+- DataSource: Adaptadores que conectan posibilitan interactuar con diferentes base de datos o otros servicios.
+- DataAccess: Conexión que nos permite acceder a esos datos.
 
-1. Download this repository.
-2. run `npm install`.
-3. run `npm run` to start working.
+## Getting started
+- Requiere tener instalado `docker y docker-comopser`.
 
-## Test
+- Clonar este repo:
+`git clone https://github.com/jordigomper/meeting-room-reservation`
 
-:building_construction:
+- Crear una instancia docker de la app:
+`docker-compose build`
 
-## Built With
+- Levantar la aplicación:
+`docker-compose up`
 
-- [Node](https://nodejs.org/en/) - Run Javascript in the server.
-- [Express](https://webpack.js.org/loaders/babel-loader/) - Node web frameworks.
+- La app ya está levantada y se puede hacer peticiones mediante `localhost:8081`.
 
-## Contributing
-
-Feel free. 💛💖
+- Dentro del directorio root hay un archivo llamado `postman_collection.json` que se puede importar en postman y contiene un ejemplo de cada uno de los endpoints habilitados.

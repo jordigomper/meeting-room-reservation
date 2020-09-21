@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "37953f30-b6c2-4a1b-b0b7-24053b9404fd",
+		"name": "Contsant API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/v1/meet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"fake-id-meet\",\r\n    \"name\": \"fake-meeting-name\",\r\n    \"startAt\": \"2020-09-10T09:00:00.000Z\",\r\n    \"finishAt\": \"2020-09-10T11:00:00.000Z\",\r\n    \"assistants\": [\r\n        {\r\n            \"id\": \"fake-id6\",\r\n            \"name\": \"fake-name\"\r\n        },\r\n        {\r\n            \"id\": \"fake-id5\",\r\n            \"name\": \"fake-name\"\r\n        },\r\n        {\r\n            \"id\": \"fake-id3\",\r\n            \"name\": \"fake-name\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/meet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"meet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/meet",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/meet?usersID=fake-id-1,fake-id-2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"meet"
+					],
+					"query": [
+						{
+							"key": "usersID",
+							"value": "fake-id-1,fake-id-2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
