@@ -1,8 +1,7 @@
-import { DateTime } from "luxon";
 import IUser from "../../User/Domain/User.interface";
 import IMeeting from "../Domain/Meeting.interface";
 import MeetingRepository from "../Domain/Meeting.repository";
-import saveMeeting, { timeOverlaps } from "../Interactors/createMeeting.interactor";
+import saveMeeting from "../Interactors/createMeeting.interactor";
 
 function meetingFactory(meeting?: Partial<IMeeting>): IMeeting {
   return {
@@ -29,13 +28,12 @@ describe("Meeting business requirements", () => {
       meetingFakeDB.push(meeting); 
       return Promise.resolve(meeting);
     },
-    getMeetingsByUsers: (users: IUser[]) => {
+    getMeetingsByUsers: (usersID: string[]) => {
       const meetingsByUsers = meetingFakeDB.filter((meeting: IMeeting) => 
         meeting.assistants.some((assistants: IUser) => 
-          users.some((user: IUser) => assistants.id === user.id )));
+          usersID.some((userID: string) => assistants.id === userID )));
       return Promise.resolve(meetingsByUsers);
     },
-    getMeetingsSortByDate: jasmine.createSpy().and.stub(),
   };
 
   const saveMeetingStub = saveMeeting(MeetingRepositoryMock);

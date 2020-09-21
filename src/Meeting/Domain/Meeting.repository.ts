@@ -1,4 +1,3 @@
-import IUser from "../../User/Domain/User.interface";
 import IMeeting from "./Meeting.interface";
 
 interface MeetingRepository {
