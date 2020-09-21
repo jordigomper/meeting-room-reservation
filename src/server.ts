@@ -6,7 +6,7 @@ import HttpMeetingAccessData from './Meeting/DataAccess/HttpMeeting.data-access'
 
 const server = express();
 
-const db = 'mongodb://localhost:27017/';
+const db = 'mongodb://database:27017/';
 connect(db);
 
 server.use(express.json());

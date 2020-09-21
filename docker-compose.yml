@@ -1,0 +1,14 @@
+version: '3'
+services:
+  api:
+    container_name: meet-api-express
+    build: .
+    depends_on: 
+      - database
+    ports:
+      - 8081:8081
+    links:
+      - database
+  database:
+    image: mongo
+    container_name: mongo-db-container
