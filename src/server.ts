@@ -2,6 +2,7 @@
 
 import express from "express";
 import connect from './mongoDBconnection';
+import HttpMeetingAccessData from './Meeting/DataAccess/HttpMeeting.data-access';
 
 const server = express();
 
@@ -10,6 +11,7 @@ connect(db);
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+server.use('/api/v1', HttpMeetingAccessData);
 
 const port = 8081;
 server.listen(port, () =>

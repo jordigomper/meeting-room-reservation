@@ -8,7 +8,10 @@ class MeetingMongoDB implements MeetingRepository {
     return await newMeeting.save();
   }
   public async getMeetingsByUsers(usersID: string[]): Promise<IMeeting[]> {
-    return await MeetingModel.find({'assistants.id':  usersID.map((id: string) => id)}, null, {sort: {startAt: 1}});
+    const criteria = usersID.length > 0 
+                      ? {'assistants.id': [...usersID]} 
+                      : null;
+    return await MeetingModel.find(criteria, null, {sort: {startAt: 1}});
   }
 }
 
