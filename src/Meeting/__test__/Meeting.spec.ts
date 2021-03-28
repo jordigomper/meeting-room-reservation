@@ -35,27 +35,27 @@ function meetingFactory(meeting?: Partial<Meeting>): Meeting {
 
 describe("Meeting business requirements", () => {
 
-  let saveMeetingCommand;
+  let createMeetingCommand;
     
   beforeEach(() => {
-    saveMeetingCommand = new CreateMeetingCommand(new MeetingRepositoryMock());
+    createMeetingCommand = new CreateMeetingCommand(new MeetingRepositoryMock());
   });
 
   it('Se puede crear una reunión', async () => {
     const meeting: Meeting = meetingFactory({});
-    expect(await saveMeetingCommand.exec(meeting)).toBeTruthy();
+    expect(await createMeetingCommand.exec(meeting)).toBeTruthy();
   }); 
 
   describe('El horario laboral es de 9:00 hasta las 18:00. Ninguna reunion puede empezar antes o acabar después de esas horas', () => {
 
     it('debería dar error si la hora de inicio es menor a las 9A.M.', async () => {
       const meeting: Meeting = meetingFactory({ startAt: '2020-10-13T08:00:00.000Z' });
-      await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
+      await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
     });
     
     it('debería dar error si la hora de finalziación es mayor a las 6P.M.', async () => {
       const meeting: Meeting = meetingFactory({ finishAt: '2020-10-13T19:00:00.000Z' });
-      await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
+      await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
     });
 
   });
@@ -65,7 +65,7 @@ describe("Meeting business requirements", () => {
       startAt: '2020-10-13T10:00:00.000Z',
       finishAt: '2020-10-13T10:05:00.000Z',
     });
-    await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
+    await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
   });
 
   it('Una reunión debe empezar y terminar en el mismo día (no pueden crearse reuniónes que empiecen en el día i y terminen en el día i+1)', async () => {
@@ -73,14 +73,14 @@ describe("Meeting business requirements", () => {
       startAt: '2020-10-13T10:00:00.000Z',
       finishAt: '2020-10-14T11:00:00.000Z',
     });
-    await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MaxTimeExceeded);
+    await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MaxTimeExceeded);
   });
 
   it('Una reunión tiene que ser atendida por mínimo un usuario, sin límite de participantes', async () => {
     const meeting: Meeting = meetingFactory({
       assistants: [],
     });
-    await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.NoUsers);
+    await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.NoUsers);
   });
 
   it('Cada usuario puede crear reuniónes, pero la reunion solo se creara si todos los participantes tienen disponibilidad', async () => {
@@ -106,7 +106,7 @@ describe("Meeting business requirements", () => {
       assistants: [user, userWithoutFreeTime],
     });
 
-    await saveMeetingCommand.exec(meeting1);
-    await expect(() => saveMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.UnavailableUser);
+    await createMeetingCommand.exec(meeting1);
+    await expect(() => createMeetingCommand.exec(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.UnavailableUser);
   });
 });
