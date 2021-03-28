@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import Meeting from "../domain/Meeting.interface";
 import User from "../../User/domain/User.interface";
 import MeetingRepository from "../domain/Meeting.repository";
-import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded as isMaxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
+import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded as isMaxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/meetingBusinessContraints";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 
 class CreateMeetingCommand {
