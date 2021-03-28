@@ -13,20 +13,20 @@ const saveMeeting = (
 
   // format time of meeting constraints
   if (isOutTime(startAt, finishAt))
-    throw 'No se pueden crear reuniónes fuera del rango establecido';
+    throw new Error('No se pueden crear reuniónes fuera del rango establecido');
   if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
-    throw 'La duración mínima de la reunión debe de ser de 30 minutos.';
+    throw new Error('La duración mínima de la reunión debe de ser de 30 minutos.');
   if (!isSameDay(startAt, finishAt))
-    throw 'La reunión no puede exceder de un día.';
+    throw new Error('La reunión no puede exceder de un día.');
 
   // meeting users constraints
   if (haveUsers(assistants))
-    throw 'Se ha de añadir mínimo un participante en la reunión.';
+    throw new Error('Se ha de añadir mínimo un participante en la reunión.');
     
   const usersID: string[] = assistants.map(({id}: IUser) => id);
   const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingsByUsers(usersID);
   if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
-    throw 'Hay usuarios que no tiene disponibilidad para esta reunión.';
+    throw new Error('Hay usuarios que no tiene disponibilidad para esta reunión.');
 
   return await meetingRepository.save(meeting);
 };
