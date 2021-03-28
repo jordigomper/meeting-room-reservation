@@ -1,5 +1,5 @@
 import User from "../../User/domain/User.interface";
-import SaveMeetingCommand from "../application/createMeeting.command";
+import CreateMeetingCommand from "../application/CreateMeeting.command";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 import Meeting from "../domain/Meeting.interface";
 import MeetingRepository from "../domain/Meeting.repository";
@@ -38,7 +38,7 @@ describe("Meeting business requirements", () => {
   let saveMeetingCommand;
     
   beforeEach(() => {
-    saveMeetingCommand = new SaveMeetingCommand(new MeetingRepositoryMock());
+    saveMeetingCommand = new CreateMeetingCommand(new MeetingRepositoryMock());
   });
 
   it('Se puede crear una reunión', async () => {

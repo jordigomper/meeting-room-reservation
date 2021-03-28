@@ -5,7 +5,7 @@ import MeetingRepository from "../domain/Meeting.repository";
 import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 
-class SaveMeetingCommand {
+class CreateMeetingCommand {
   constructor(private meetingRepository: MeetingRepository) {} 
 
   async exec(meeting: Meeting): Promise<Meeting> {
@@ -36,4 +36,4 @@ class SaveMeetingCommand {
 
 } 
 
-export default SaveMeetingCommand;
+export default CreateMeetingCommand;
