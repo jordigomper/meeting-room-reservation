@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import IUser from "../../../User/Domain/User.interface";
+import IUser from "../../../User/domain/User.interface";
 import IMeeting from "../../domain/Meeting.interface";
 
 export function parseToISODataTime(dataTime: string): DateTime {

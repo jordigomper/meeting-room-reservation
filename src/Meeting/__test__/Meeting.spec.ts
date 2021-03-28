@@ -1,7 +1,7 @@
-import IUser from "../../User/Domain/User.interface";
+import IUser from "../../User/domain/User.interface";
 import saveMeeting from "../application/createMeeting.interactor";
-import IMeeting from "../Domain/Meeting.interface";
-import MeetingRepository from "../Domain/Meeting.repository";
+import IMeeting from "../domain/Meeting.interface";
+import MeetingRepository from "../domain/Meeting.repository";
 
 
 function meetingFactory(meeting?: Partial<IMeeting>): IMeeting {

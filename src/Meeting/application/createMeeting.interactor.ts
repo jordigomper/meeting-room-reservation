@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
-import IUser from "../../User/Domain/User.interface";
 import IMeeting from "../domain/Meeting.interface";
+import IUser from "../../User/domain/User.interface";
 import MeetingRepository from "../domain/Meeting.repository";
 import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, isSameDay, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 
@@ -22,6 +22,7 @@ const saveMeeting = (
   // meeting users constraints
   if (haveUsers(assistants))
     throw 'Se ha de añadir mínimo un participante en la reunión.';
+    
   const usersID: string[] = assistants.map(({id}: IUser) => id);
   const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingsByUsers(usersID);
   if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
