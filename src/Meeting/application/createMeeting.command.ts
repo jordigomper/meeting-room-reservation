@@ -25,8 +25,7 @@ class CreateMeetingCommand {
     if (haveUsers(assistants))
       throw new Error(MeetingBusinessErrorMessages.NoUsers);
       
-    const usersID: string[] = assistants.map(({id}: User) => id);
-    const meetingsByUser: Meeting[] = await this.meetingRepository.getMeetingsByUsers(usersID);
+    const meetingsByUser: Meeting[] = await this.getMeetingByUser(assistants);
 
     if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
       throw new Error(MeetingBusinessErrorMessages.UnavailableUser);
@@ -34,6 +33,12 @@ class CreateMeetingCommand {
     return await this.meetingRepository.save(meeting);
   }
 
+
+  private async getMeetingByUser(assistants: User[]) {
+    const usersID: string[] = assistants.map(({ id }: User) => id);
+    const meetingsByUser: Meeting[] = await this.meetingRepository.getMeetingsByUsers(usersID);
+    return meetingsByUser;
+  }
 } 
 
 export default CreateMeetingCommand;
