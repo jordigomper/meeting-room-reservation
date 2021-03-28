@@ -1,7 +1,7 @@
-import IMeeting from "./Meeting.interface";
+import Meeting from "./Meeting.interface";
 
 interface MeetingRepository {
-  save(meeting: IMeeting): Promise<IMeeting>,
-  getMeetingsByUsers(usersID: string[]): Promise<IMeeting[]>
+  save(meeting: Meeting): Promise<Meeting>,
+  getMeetingsByUsers(usersID: string[]): Promise<Meeting[]>
 }
 export default MeetingRepository;

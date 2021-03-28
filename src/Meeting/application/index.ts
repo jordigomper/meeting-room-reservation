@@ -1,10 +1,10 @@
 import MeetingMongoDB from "../infrastructure/db/mongo/MeetingMongoDB.data-sources";
-import saveMeetingInteractor from "./createMeeting.interactor";
-import getMeetingsByUsersInteractor from "./getMeetingsByUsers.interactor";
+import saveMeetingCommand from "./createMeeting.command";
+import getMeetingsByUsersCommand from "./getMeetingsByUsers.command";
 
 /**
  * MongoDB Interactors
  */
 const meetingRepository = new MeetingMongoDB();
-export const saveMeeting = saveMeetingInteractor(meetingRepository);
-export const getMeetingsByUsers = getMeetingsByUsersInteractor(meetingRepository);
+export const saveMeeting = saveMeetingCommand(meetingRepository);
+export const getMeetingsByUsers = getMeetingsByUsersCommand(meetingRepository);

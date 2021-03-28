@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
-import IUser from "../../../User/domain/User.interface";
-import IMeeting from "../../domain/Meeting.interface";
+import User from "../../../User/domain/User.interface";
+import Meeting from "../../domain/Meeting.interface";
 
 export function parseToISODataTime(dataTime: string): DateTime {
   return DateTime.fromISO(dataTime, { setZone: true });
 }
-export function haveUsers(assistants: IUser[]): boolean {
+export function haveUsers(assistants: User[]): boolean {
   return !assistants.length;
 }
 export function isTheMinimumMeetingTimeInsufficient(startAt: DateTime, finishAt: DateTime): boolean {
@@ -20,8 +20,8 @@ function isSameDay(date1: DateTime, date2: DateTime): boolean {
 export function maxTimeExceeded(date1: DateTime, date2: DateTime): boolean {
   return !isSameDay(date1, date2);
 }
-export function areThereUsersUnavailable(meetingsByUser: IMeeting[], startAt: DateTime, finishAt: DateTime): boolean {
-  return meetingsByUser.some((meeting: IMeeting) => {
+export function areThereUsersUnavailable(meetingsByUser: Meeting[], startAt: DateTime, finishAt: DateTime): boolean {
+  return meetingsByUser.some((meeting: Meeting) => {
     const meetingStartDataTime = parseToISODataTime(meeting.startAt);
     const meetingFinishDataTime = parseToISODataTime(meeting.finishAt);
     return isMeetingsInSameTime(startAt, finishAt, meetingStartDataTime, meetingFinishDataTime);

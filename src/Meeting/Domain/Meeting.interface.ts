@@ -1,11 +1,11 @@
-import IUser from '../../User/Domain/User.interface';
+import User from '../../User/Domain/User.interface';
 
-interface IMeeting {
+interface Meeting {
   id: string,
   name: string,
   startAt: string,
   finishAt: string,
-  assistants: IUser[]
+  assistants: User[]
 }
 
-export default IMeeting;
+export default Meeting;

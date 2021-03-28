@@ -1,13 +1,13 @@
 import MeetingRepository from '../../../domain/Meeting.repository';
-import IMeeting from '../../../domain/Meeting.interface';
+import Meeting from '../../../domain/Meeting.interface';
 import MeetingModel from './MeetingMongoDB.schema';
 
 class MeetingMongoDB implements MeetingRepository {
-  public async save(meeting: IMeeting): Promise<IMeeting> {
+  public async save(meeting: Meeting): Promise<Meeting> {
     const newMeeting = new MeetingModel(meeting);
     return await newMeeting.save();
   }
-  public async getMeetingsByUsers(usersID: string[]): Promise<IMeeting[]> {
+  public async getMeetingsByUsers(usersID: string[]): Promise<Meeting[]> {
     const criteria = usersID.length > 0 
                       ? {'assistants.id': [...usersID]} 
                       : null;

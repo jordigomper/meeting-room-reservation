@@ -1,13 +1,13 @@
 import { DateTime } from "luxon";
-import IMeeting from "../domain/Meeting.interface";
-import IUser from "../../User/domain/User.interface";
+import Meeting from "../domain/Meeting.interface";
+import User from "../../User/domain/User.interface";
 import MeetingRepository from "../domain/Meeting.repository";
 import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 
-const saveMeeting = (
+const saveMeetingCommand = (
   meetingRepository: MeetingRepository
-) => async (meeting: IMeeting): Promise<IMeeting> => {
+) => async (meeting: Meeting): Promise<Meeting> => {
   const startAt: DateTime = parseToISODataTime(meeting.startAt);
   const finishAt: DateTime = parseToISODataTime(meeting.finishAt);
   const {assistants} = meeting;
@@ -24,8 +24,8 @@ const saveMeeting = (
   if (haveUsers(assistants))
     throw new Error(MeetingBusinessErrorMessages.NoUsers);
     
-  const usersID: string[] = assistants.map(({id}: IUser) => id);
-  const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingsByUsers(usersID);
+  const usersID: string[] = assistants.map(({id}: User) => id);
+  const meetingsByUser: Meeting[] = await meetingRepository.getMeetingsByUsers(usersID);
 
   if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
     throw new Error(MeetingBusinessErrorMessages.UnavailableUser);
@@ -33,4 +33,4 @@ const saveMeeting = (
   return await meetingRepository.save(meeting);
 };
 
-export default saveMeeting;
+export default saveMeetingCommand;

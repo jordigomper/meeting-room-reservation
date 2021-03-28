@@ -1,13 +1,13 @@
 import { Router, Response, Request } from 'express';
 import { saveMeeting, getMeetingsByUsers } from '../../application/index';
-import IMeeting from '../../domain/Meeting.interface';
+import Meeting from '../../domain/Meeting.interface';
 import { extractArray } from './utils/queryParams';
  
 const Api = Router(); 
 
 const saveMeetingController = async (req: Request, res: Response) => {
   try {
-    const meeting: IMeeting = req.body;  
+    const meeting: Meeting = req.body;  
     const response = await saveMeeting(meeting);
     res.status(200).json(response);
   } catch (error) {
@@ -17,7 +17,7 @@ const saveMeetingController = async (req: Request, res: Response) => {
 const getMeetingsByUsersController = async (req: Request, res: Response) => {
   try {
     const usersID: string[] = extractArray(req);
-    const response: IMeeting[] = await getMeetingsByUsers(usersID);
+    const response: Meeting[] = await getMeetingsByUsers(usersID);
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json(error);

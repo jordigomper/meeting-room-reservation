@@ -1,8 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 import UserSchema from "../../../../User/infrastructure/db/mongo/UserMongoDB.schema";
-import IMeeting from "../../../domain/Meeting.interface";
+import Meeting from "../../../domain/Meeting.interface";
 
-interface MeetingWrapper extends Document, IMeeting {
+interface MeetingWrapper extends Document, Meeting {
   id: string,
 }
 
