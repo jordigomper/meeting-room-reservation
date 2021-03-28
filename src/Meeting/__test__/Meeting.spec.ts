@@ -1,6 +1,6 @@
 import IUser from "../../User/domain/User.interface";
 import saveMeeting from "../application/createMeeting.interactor";
-import { MeetingErrorMessages } from "../application/MeetingErrorMessages";
+import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 import IMeeting from "../domain/Meeting.interface";
 import MeetingRepository from "../domain/Meeting.repository";
 
@@ -50,12 +50,12 @@ describe("Meeting business requirements", () => {
 
     it('debería dar error si la hora de inicio es menor a las 9A.M.', async () => {
       const meeting: IMeeting = meetingFactory({ startAt: '2020-10-13T08:00:00.000Z' });
-      await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.OutTimeMessage);
+      await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
     });
     
     it('debería dar error si la hora de finalziación es mayor a las 6P.M.', async () => {
       const meeting: IMeeting = meetingFactory({ finishAt: '2020-10-13T19:00:00.000Z' });
-      await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.OutTimeMessage);
+      await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.OutTimeMessage);
     });
 
   });
@@ -65,7 +65,7 @@ describe("Meeting business requirements", () => {
       startAt: '2020-10-13T10:00:00.000Z',
       finishAt: '2020-10-13T10:05:00.000Z',
     });
-    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.MinimumTimeInsufficient);
+    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
   });
 
   it('Una reunión debe empezar y terminar en el mismo día (no pueden crearse reuniónes que empiecen en el día i y terminen en el día i+1)', async () => {
@@ -73,14 +73,14 @@ describe("Meeting business requirements", () => {
       startAt: '2020-10-13T10:00:00.000Z',
       finishAt: '2020-10-14T11:00:00.000Z',
     });
-    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.MaxTimeExceeded);
+    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.MaxTimeExceeded);
   });
 
   it('Una reunión tiene que ser atendida por mínimo un usuario, sin límite de participantes', async () => {
     const meeting: IMeeting = meetingFactory({
       assistants: [],
     });
-    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.NoUsers);
+    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.NoUsers);
   });
 
   it('Cada usuario puede crear reuniónes, pero la reunion solo se creara si todos los participantes tienen disponibilidad', async () => {
@@ -107,6 +107,6 @@ describe("Meeting business requirements", () => {
     });
 
     await saveMeetingCommand(meeting1);
-    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.UnavailableUser);
+    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingBusinessErrorMessages.UnavailableUser);
   });
 });
