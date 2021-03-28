@@ -5,13 +5,13 @@ import { extractArray } from './utils/queryParams';
  
 const Api = Router(); 
 
-const saveMeetingController = async (req: Request, res: Response) => {
+const createMeetingController = async (req: Request, res: Response) => {
   try {
     const meeting: Meeting = req.body;  
     const response = await createMeetingCommand.exec(meeting);
     res.status(200).json(response);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json(error.message);
   }
 };
 const getMeetingsByUsersController = async (req: Request, res: Response) => {
@@ -20,12 +20,12 @@ const getMeetingsByUsersController = async (req: Request, res: Response) => {
     const response: Meeting[] = await getMeetingsByUsersCommand.exec(usersID);
     res.status(200).json(response);
   } catch (error) {
-    res.status(400).json(error);
+    res.status(400).json(error.message);
   }
 };
 
 Api.route('/meet')
-  .post(saveMeetingController)
+  .post(createMeetingController)
   .get(getMeetingsByUsersController);
 
 export default Api;
