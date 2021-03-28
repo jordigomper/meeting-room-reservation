@@ -1,4 +1,4 @@
-import User from '../../User/Domain/User.interface';
+import User from '../../User/domain/User.interface';
 
 interface Meeting {
   id: string,
