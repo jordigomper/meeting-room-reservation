@@ -5,32 +5,35 @@ import MeetingRepository from "../domain/Meeting.repository";
 import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 
-const saveMeetingCommand = (
-  meetingRepository: MeetingRepository
-) => async (meeting: Meeting): Promise<Meeting> => {
-  const startAt: DateTime = parseToISODataTime(meeting.startAt);
-  const finishAt: DateTime = parseToISODataTime(meeting.finishAt);
-  const {assistants} = meeting;
+class SaveMeetingCommand {
+  constructor(private meetingRepository: MeetingRepository) {} 
 
-  // format time of meeting constraints
-  if (isOutTime(startAt, finishAt))
-    throw new Error(MeetingBusinessErrorMessages.OutTimeMessage);
-  if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
-    throw new Error(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
-  if (maxTimeExceeded(startAt, finishAt))
-    throw new Error(MeetingBusinessErrorMessages.MaxTimeExceeded);
+  async exec(meeting: Meeting): Promise<Meeting> {
+    const startAt: DateTime = parseToISODataTime(meeting.startAt);
+    const finishAt: DateTime = parseToISODataTime(meeting.finishAt);
+    const {assistants} = meeting;
 
-  // meeting users constraints
-  if (haveUsers(assistants))
-    throw new Error(MeetingBusinessErrorMessages.NoUsers);
-    
-  const usersID: string[] = assistants.map(({id}: User) => id);
-  const meetingsByUser: Meeting[] = await meetingRepository.getMeetingsByUsers(usersID);
+    // format time of meeting constraints
+    if (isOutTime(startAt, finishAt))
+      throw new Error(MeetingBusinessErrorMessages.OutTimeMessage);
+    if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
+      throw new Error(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
+    if (maxTimeExceeded(startAt, finishAt))
+      throw new Error(MeetingBusinessErrorMessages.MaxTimeExceeded);
 
-  if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
-    throw new Error(MeetingBusinessErrorMessages.UnavailableUser);
+    // meeting users constraints
+    if (haveUsers(assistants))
+      throw new Error(MeetingBusinessErrorMessages.NoUsers);
+      
+    const usersID: string[] = assistants.map(({id}: User) => id);
+    const meetingsByUser: Meeting[] = await this.meetingRepository.getMeetingsByUsers(usersID);
 
-  return await meetingRepository.save(meeting);
-};
+    if(areThereUsersUnavailable(meetingsByUser, startAt, finishAt)) 
+      throw new Error(MeetingBusinessErrorMessages.UnavailableUser);
 
-export default saveMeetingCommand;
+    return await this.meetingRepository.save(meeting);
+  }
+
+} 
+
+export default SaveMeetingCommand;
