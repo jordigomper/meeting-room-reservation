@@ -1,10 +1,12 @@
 import Meeting from "../domain/Meeting.interface";
 import MeetingRepository from "../domain/Meeting.repository";
 
-const getMeetingsByUserCommand = (
-  meetingRepository: MeetingRepository
-) => async (usersID: string[]): Promise<Meeting[]> => {
-  return await meetingRepository.getMeetingsByUsers(usersID);
-};
+class GetMeetingsByUserCommand {
+  constructor(private meetingRepository: MeetingRepository) {}
 
-export default getMeetingsByUserCommand;
+  async exec(usersID: string[]): Promise<Meeting[]> {
+    return await this.meetingRepository.getMeetingsByUsers(usersID);
+  }
+}
+
+export default GetMeetingsByUserCommand;
