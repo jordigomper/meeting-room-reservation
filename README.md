@@ -9,7 +9,7 @@ Inputs and Outputs
 - DataAccess: Conexión que nos permite acceder a esos datos.
 
 ## Getting started in dev mode
-- Requiere tener instalado `docker y docker-comopser`.
+- Requiere tener instalado `docker y docker-composer`.
 
 - Clonar este repo:
 `git clone https://github.com/jordigomper/meeting-room-reservation`
