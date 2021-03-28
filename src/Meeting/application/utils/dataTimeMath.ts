@@ -14,8 +14,11 @@ export function isTheMinimumMeetingTimeInsufficient(startAt: DateTime, finishAt:
 export function isOutTime(startAt: DateTime, finishAt: DateTime): boolean {
   return startAt.hour < 9 || finishAt.hour > 18;
 }
-export function isSameDay(date1: DateTime, date2: DateTime): boolean {
+function isSameDay(date1: DateTime, date2: DateTime): boolean {
   return date1.hasSame(date2, 'day') && date1.hasSame(date2, 'month') && date1.hasSame(date2, 'year');
+}
+export function maxTimeExceeded(date1: DateTime, date2: DateTime): boolean {
+  return !isSameDay(date1, date2);
 }
 export function areThereUsersUnavailable(meetingsByUser: IMeeting[], startAt: DateTime, finishAt: DateTime): boolean {
   return meetingsByUser.some((meeting: IMeeting) => {

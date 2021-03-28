@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import IMeeting from "../domain/Meeting.interface";
 import IUser from "../../User/domain/User.interface";
 import MeetingRepository from "../domain/Meeting.repository";
-import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, isSameDay, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
+import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 
 const saveMeeting = (
   meetingRepository: MeetingRepository
@@ -16,7 +16,7 @@ const saveMeeting = (
     throw new Error('No se pueden crear reuniónes fuera del rango establecido');
   if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
     throw new Error('La duración mínima de la reunión debe de ser de 30 minutos.');
-  if (!isSameDay(startAt, finishAt))
+  if (maxTimeExceeded(startAt, finishAt))
     throw new Error('La reunión no puede exceder de un día.');
 
   // meeting users constraints
