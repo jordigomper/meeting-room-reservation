@@ -2,7 +2,7 @@
 
 import express from "express";
 import connect from './mongoDBconnection';
-import HttpMeetingAccessData from './Meeting/DataAccess/HttpMeeting.data-access';
+import HttpMeetingAccessData from './Meeting/infrastructure/http/HttpMeeting.data-access';
 
 const server = express();
 
