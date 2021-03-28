@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import Meeting from "../domain/Meeting.interface";
 import User from "../../User/domain/User.interface";
 import MeetingRepository from "../domain/Meeting.repository";
-import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
+import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, maxTimeExceeded as isMaxTimeExceeded, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 import { MeetingBusinessErrorMessages } from "../domain/MeetingBusinessErrorMessages";
 
 class CreateMeetingCommand {
@@ -18,7 +18,7 @@ class CreateMeetingCommand {
       throw new Error(MeetingBusinessErrorMessages.OutTimeMessage);
     if (isTheMinimumMeetingTimeInsufficient(startAt, finishAt))
       throw new Error(MeetingBusinessErrorMessages.MinimumTimeInsufficient);
-    if (maxTimeExceeded(startAt, finishAt))
+    if (isMaxTimeExceeded(startAt, finishAt))
       throw new Error(MeetingBusinessErrorMessages.MaxTimeExceeded);
 
     // meeting users constraints
