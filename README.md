@@ -1,12 +1,9 @@
 # Hexagonal Architecture con NodeJS y TypeScript - Meeting reservation
 Una aplicación básica para poder crear reuniónes dependiendo de la disponibilidad de los usuarios convocados.
 
-- Domain: Contiene toda la lógica del negocio.
-- Interactors: Casos de uso de nuestro negocio.
-
-Inputs and Outputs
-- DataSource: Adaptadores que conectan posibilitan interactuar con diferentes base de datos o otros servicios.
-- DataAccess: Conexión que nos permite acceder a esos datos.
+- domain: Contiene los dominios de nuestro negocio.
+- application: Contiene los casos de uso de nuestro negocio.
+- infrastructure: contiente las adaptadores que permiten interactuar o guardar datos de la app.
 
 ## Getting started in dev mode
 - Requiere tener instalado `docker y docker-composer`.
@@ -25,6 +22,4 @@ Inputs and Outputs
 - Dentro del directorio root hay un archivo llamado `postman_collection.json` que se puede importar en postman y contiene un ejemplo de cada uno de los endpoints habilitados.
 
 ## Testing
-- Abrir una consola
-- Lanzar el comando: `docker exec -it meet-api-express bash` para abrir una consola dentro del contenedor.
-- Ahora lanzar el comando `npm run test` y se ejecutará la batería de tests.
+- Lanzar `npm run test` desde el directorio principal de la app.
