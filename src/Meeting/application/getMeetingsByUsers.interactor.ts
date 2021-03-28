@@ -1,5 +1,5 @@
-import IMeeting from "../Domain/Meeting.interface";
-import MeetingRepository from "../Domain/Meeting.repository";
+import IMeeting from "../domain/Meeting.interface";
+import MeetingRepository from "../domain/Meeting.repository";
 
 const getMeetingsByUser = (
   meetingRepository: MeetingRepository

@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import IUser from "../../../User/Domain/User.interface";
-import IMeeting from "../../Domain/Meeting.interface";
+import IMeeting from "../../domain/Meeting.interface";
 
 export function parseToISODataTime(dataTime: string): DateTime {
   return DateTime.fromISO(dataTime, { setZone: true });

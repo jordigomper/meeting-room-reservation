@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
-import { saveMeeting, getMeetingsByUsers } from '../Interactors/index';
-import IMeeting from '../Domain/Meeting.interface';
+import { saveMeeting, getMeetingsByUsers } from '../../application/index';
+import IMeeting from '../../domain/Meeting.interface';
 import { extractArray } from './utils/queryParams';
  
 const Api = Router(); 

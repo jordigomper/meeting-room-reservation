@@ -1,5 +1,5 @@
-import MeetingRepository from '../../Domain/Meeting.repository';
-import IMeeting from '../../Domain/Meeting.interface';
+import MeetingRepository from '../../../domain/Meeting.repository';
+import IMeeting from '../../../domain/Meeting.interface';
 import MeetingModel from './MeetingMongoDB.schema';
 
 class MeetingMongoDB implements MeetingRepository {

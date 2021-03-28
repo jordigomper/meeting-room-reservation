@@ -1,4 +1,4 @@
-import MeetingMongoDB from "../DataSources/MongoDB/MeetingMongoDB.data-sources";
+import MeetingMongoDB from "../infrastructure/db/mongo/MeetingMongoDB.data-sources";
 import saveMeetingInteractor from "./createMeeting.interactor";
 import getMeetingsByUsersInteractor from "./getMeetingsByUsers.interactor";
 

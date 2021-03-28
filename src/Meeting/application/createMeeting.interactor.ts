@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import IUser from "../../User/Domain/User.interface";
-import IMeeting from "../Domain/Meeting.interface";
-import MeetingRepository from "../Domain/Meeting.repository";
+import IMeeting from "../domain/Meeting.interface";
+import MeetingRepository from "../domain/Meeting.repository";
 import { parseToISODataTime, isOutTime, isTheMinimumMeetingTimeInsufficient, isSameDay, haveUsers, areThereUsersUnavailable } from "./utils/dataTimeMath";
 
 const saveMeeting = (
