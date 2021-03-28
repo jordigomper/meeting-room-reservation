@@ -22,7 +22,7 @@ const saveMeeting = (
 
   // meeting users constraints
   if (haveUsers(assistants))
-    throw new Error(MeetingErrorMessages.AnyUsers);
+    throw new Error(MeetingErrorMessages.NoUsers);
     
   const usersID: string[] = assistants.map(({id}: IUser) => id);
   const meetingsByUser: IMeeting[] = await meetingRepository.getMeetingsByUsers(usersID);

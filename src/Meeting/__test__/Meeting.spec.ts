@@ -80,7 +80,7 @@ describe("Meeting business requirements", () => {
     const meeting: IMeeting = meetingFactory({
       assistants: [],
     });
-    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.AnyUsers);
+    await expect(() => saveMeetingCommand(meeting)).rejects.toThrowError(MeetingErrorMessages.NoUsers);
   });
 
   it('Cada usuario puede crear reuniónes, pero la reunion solo se creara si todos los participantes tienen disponibilidad', async () => {
